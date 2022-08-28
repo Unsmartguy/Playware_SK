@@ -19,8 +19,10 @@ const Developer = () => {
     const [images, setImages] = useState([]);
     const [gamesList, setGameList] = useState([]);
     const [publisher, setPublisher] = useState("");
-    const [AddOnsList, setAddOnsList] = useState([]);
 
+
+//-----------------------------------------New---------------------------------
+    const [AddOnsList, setAddOnsList] = useState([]);
     const [AddOnsName, setAddOnsName] = useState("");
     const [GameName, setGameName] = useState("");
     const [Price, setPrice] = useState("");
@@ -53,7 +55,7 @@ const Developer = () => {
          
     };
     
-    
+  //-------------------------------------------------------------------------  
     
 
 
@@ -117,18 +119,14 @@ const Developer = () => {
     }, [authState]);
 
 
-
+//-----------------------------------------New---------------------------------
     useEffect(() => {
       
         Axios.get(`http://localhost:3001/AddOns/`).then((response) => {
             setAddOnsList(response.data);
-        });
-  
-         
-        
-       
-       
+        });     
     }, []);
+//--------------------------------------------------------------------------
 
 
   const pullGame=(game_id,state)=>{
