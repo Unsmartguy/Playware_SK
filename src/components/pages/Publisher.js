@@ -10,33 +10,81 @@ import './Card.css';
 
 const Publisher= () => {
 
-
-
-
-
-
     const [gamesList, setGameList] = useState([]);
     const [developerList, setDeveloper] = useState([]);
+    const [price, setPrice] = useState();                   //NEW>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
-  
     useEffect(() => {
-        Axios.get(`http://localhost:3001/games/`).then((response) => {
+        Axios.get(`http://localhost:3001/games/getlist`).then((response) => {
             setGameList(response.data);
         });
-
-        Axios.get(`http://localhost:3001/games/`).then((response) => {
+        Axios.get(`http://localhost:3001/games/getlist`).then((response) => {
             setDeveloper(response.data);
-        });
-  
-      
+        }); 
     }, []);
 
 
 
+    const publishGame=(game_id,state)=>{
+    if(state==2)
+        state=3;
+    if(state==5)
+        state=6;
+        Axios.post('http://localhost:3001/games/operations',{
+            id:game_id,  //id will be accessible from back
+            price: price,
+            state:state
+        });
+      };
+
+      const pullGame=(game_id,state)=>{
+        if(state==3)
+            state=10;
+        if(state==4)
+            state=11;
+        if(state==6)
+            state=8;
+        if(state==7)
+            state=9;
+        Axios.post('http://localhost:3001/games/operations',{
+            id:game_id,  
+            state:state
+        });
+      };
+
+      const deleteGame=(game_id,state)=>{
+        if(state==5&&state==2)
+            state=1;
+        Axios.post('http://localhost:3001/games/operations',{
+            id:game_id, 
+            state:state
+        });
+      };
+
+      const acceptDeveloper=(developer_id,state)=>{
+        if(state==1)
+            state=2
+            Axios.post('http://localhost:3001/developers/operation',{
+                id:developer_id, 
+                state: state
+            });
+      };
+
+      const suspendDeveloper=(developer_id,state)=>{
+        if(state==2)
+            state=1
+        Axios.post('http://localhost:3001/developers/operation',{
+            id:developer_id, 
+            state: state
+        });
+      };
 
 
-
-
+      const removeDeveloper=(developer_id,state)=>{
+        Axios.post('http://localhost:3001/developers/remove',{
+            id:developer_id, 
+        });
+      };
 
 
 
@@ -53,14 +101,8 @@ const Publisher= () => {
 
 
 
-
-
-
-
-
-
             <div className="container">
-               
+
 
 
                 <br></br>
@@ -111,20 +153,26 @@ const Publisher= () => {
                                     </div>
 
                                     <br></br>
+
+
+
+                                    <input type="integer" id="updateInput" onChange={(e)=>{setPrice(e.target.value)}}></input>
                             
                                     <div className='btn'>
-                                        <button>
-                                            <a href='/Game'>
+                                        <button onClick={()=>{publishGame(game.id,game.state)}}>
                                                Publish
-                                            </a>
                                         </button>
                                         
                                     </div>
                                     <div className='btn'>
-                                        <button>
-                                            <a href='/Game'>
+                                        <button onClick={()=>{pullGame(game.id,game.state)}}>
                                             Request to pull from store
-                                            </a>
+                                        </button>
+                                        
+                                    </div>
+                                    <div className='btn'>
+                                        <button onClick={()=>{deleteGame(game.id,game.state)}}>
+                                            Delete
                                         </button>
                                         
                                     </div>
@@ -153,7 +201,7 @@ const Publisher= () => {
             </div>
 
             <div className="row mb-4">
-                  <h2>Publisher List:</h2>
+                  <h2>Developer List:</h2>
             <div className="col-lg-12 col-lg-6 border shadow rounded p-3">
 
 
@@ -208,6 +256,8 @@ const Publisher= () => {
                                                 <br></br>
                                                 <b>Earnings: </b> {developer.earnings} $
                                                 <br></br>
+                                                <b>state: </b> {developer.state}
+                                                <br></br>
                                                
                                                 
                                             </p>
@@ -219,18 +269,21 @@ const Publisher= () => {
                                     <br></br>
                             
                                     <div className='btn'>
-                                        <button>
-                                            <a href='/Game'>
-                                               Add
-                                            </a>
+                                        <button onClick={()=>{acceptDeveloper(developer.id,developer.state)}}>
+                                               Accept
                                         </button>
                                         
                                     </div>
                                     <div className='btn'>
-                                        <button>
-                                            <a href='/Game'>
+                                        <button onClick={()=>{removeDeveloper(developer.id,developer.state)}}>
                                                Remove
-                                            </a>
+                                        </button>
+                                        
+                                    </div>
+
+                                    <div className='btn'>
+                                        <button onClick={()=>{suspendDeveloper(developer.id,developer.state)}}>
+                                               suspend
                                         </button>
                                         
                                     </div>

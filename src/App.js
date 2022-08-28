@@ -1,38 +1,189 @@
 
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 //import '../node_modules/bootstrap/dist/css/bootstrap.css'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import '../node_modules/jquery/dist/jquery.min.js'
-import '../node_modules/bootstrap/dist/js/bootstrap.min.js'
-import NavBar from './components/pages/NavBar';
-import User_Login from './components/pages/User_Login'
-import User_Register from './components/pages/User_Register';
-import Game from './components/pages/Game'
-import Home from './components/pages/Home'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
+import '../node_modules/jquery/dist/jquery.min.js';
 import Admin from './components/pages/Admin';
-import Landing from './components/pages/Landing';
 import Admin_Login from './components/pages/Admin_Login';
 import Admin_Options from './components/pages/Admin_Options';
+import Buy from './components/pages/Buy';
 import Developer from './components/pages/Developer';
-import Developer_Register from './components/pages/Developer_Register';
 import Developer_Login from './components/pages/Developer_Login';
-import Types from './components/pages/Types';
+import Developer_Register from './components/pages/Developer_Register';
+import Game from './components/pages/Game';
+import Home from './components/pages/Home';
+import Landing from './components/pages/Landing';
+import NavBar from './components/pages/NavBar';
 import Publisher from './components/pages/Publisher';
 import Publisher_Login from './components/pages/Publisher_Login';
 import Publisher_Register from './components/pages/Publisher_Register';
-import Buy from './components/pages/Buy';
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Types from './components/pages/Types';
+import User_Login from './components/pages/User_Login';
+import User_Register from './components/pages/User_Register';
+import { AuthContext } from "./helpers/AuthContext";
 
 
 function App() {
+
+   const [authState, setAuthState] = useState({
+      user_name: "",
+      user_id: null,
+      user_is_logged: false,
+      developer_name: "",
+      developer_id: null,
+      developer_status: null,
+      developer_is_logged: false,
+      publisher_name: "",
+      publisher_id: null,
+      publisher_status: null,
+      publisher_is_logged: false,
+    });
+    
+    // const [authStateDeveloper, setAuthStateDeveloper] = useState({
+    //   user_name: "",
+    //   user_id: null,
+    //   user_is_logged: false,
+    //   developer_name: "",
+    //   developer_id: null,
+    //   developer_status: null,
+    //   developer_is_logged: false,
+    //   poublisher_name: "",
+    //   publisher_id: null,
+    //   publisher_status: null,
+    //   publisher_is_logged: false,
+    // });
+
+    // const [authStatePublisher, setAuthPublisher] = useState({
+    //   user_name: "",
+    //   user_id: null,
+    //   user_is_logged: false,
+    //   developer_name: "",
+    //   developer_id: null,
+    //   developer_status: null,
+    //   developer_is_logged: false,
+    //   poublisher_name: "",
+    //   publisher_id: null,
+    //   publisher_status: null,
+    //   publisher_is_logged: false,
+    // });
+
+  useEffect(()=> {
+
+    console.log(localStorage.getItem("userToken") );
+    console.log(localStorage.getItem("developerToken") );
+    console.log(localStorage.getItem("publisherToken") );
+
+    if(localStorage.getItem("userToken")) {
+        axios.get("http://localhost:3001/users/auth",{
+          headers: {
+                userToken: localStorage.getItem("userToken"),
+          }
+          }).then((res)=>{
+              // console.log(res.data);
+              if (res.data.error) {
+              setAuthState({ ...authState, user_is_logged: false });
+            } else {
+              // console.log(res.data);
+              setAuthState({
+                user_name: res.data.user_name,
+                user_id: res.data.user_id,
+                user_is_logged: true,
+
+                developer_name: "",
+                developer_id: null,
+                developer_status: null,
+                developer_is_logged: false,
+
+                publisher_name: "",
+                publisher_id: null,
+                publisher_status: null,
+                publisher_is_logged: false
+
+              });
+            }
+          });
+    }
+
+    if(localStorage.getItem("developerToken")) {
+        axios.get("http://localhost:3001/developers/auth",{
+          headers: {
+                developerToken: localStorage.getItem("developerToken"),
+          }
+          }).then((res)=>{
+            // console.log("dEVELOPER");
+              // console.log(res.data);
+              if (res.data.error) {
+              setAuthState({ ...authState, developer_is_logged: false });
+            } else {
+              setAuthState({
+                developer_name: res.data.developer_name,
+                developer_id: res.data.developer_id,
+                developer_status: res.data.developer_status,
+                developer_is_logged: true,
+
+                user_name: "",
+                user_id: null,
+                user_is_logged: false,
+
+                publisher_name: "",
+                publisher_id: null,
+                publisher_status: null,
+                publisher_is_logged: false
+              });
+            }
+          });
+    }
+
+    if(localStorage.getItem("publisherToken")) {
+        axios.get("http://localhost:3001/publishers/auth",{
+          headers: {
+                publisherToken: localStorage.getItem("publisherToken"),
+          }
+          }).then((res)=>{
+              console.log(res.data);
+              if (res.data.error) {
+              setAuthState({ ...authState, publisher_is_logged: false });
+            } else {
+              setAuthState({
+                publisher_name: res.data.publisher_name,
+                publisher_id: res.data.publisher_id,
+                publisher_status: res.data.publisher_status,
+                publisher_is_logged: true,
+
+                user_name: "",
+                user_id: null,
+                user_is_logged: false,
+
+                developer_name: "",
+                developer_id: null,
+                developer_status: null,
+                developer_is_logged: false
+              });
+            }
+          });
+    }
+    
+    console.log("MELLO");
+    console.log(authState);
+
+   }, []);
+
    return (
 
+      <div className="App">
+
+      <AuthContext.Provider value={{ authState, setAuthState }}>
+       
       <BrowserRouter>
          <NavBar />
          <Routes>
           
-            <Route exact path="/" element={<Landing/>} />
+            <Route exact path="/my-app" element={<Landing/>} />
             <Route exact path="/User_Login" element={<User_Login/>} />
             <Route exact path="/User_Register" element={<User_Register />} />
             <Route exact path="/Admin_Options" element={<Admin_Options/>} />
@@ -52,8 +203,15 @@ function App() {
 
          </Routes>
 
+         <ToastContainer />
+         
 
       </BrowserRouter>
+
+      </AuthContext.Provider>
+      
+
+      </div>
 
 
 

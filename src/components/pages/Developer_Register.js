@@ -1,29 +1,48 @@
-import Axios from "axios"
-import React from "react";
-import { Link } from "react-router-dom"
-import { useState } from "react";
+import Axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Developer_Register = () => {
 
-
-    
     const [password, setPassword] = useState("");
+    const [password2, setPassword2] = useState("");
     const [name, setName] = useState("");
-    const [publisher, setPublisher] = useState("");
+    const [publisher_name, setPublisher_name] = useState("");
+
+    let navigate = useNavigate();
    
     
     
     const addDeveloper = () => {
-      Axios.post("http://localhost:3001/auth", {
-        name:name,
-        password: password,
-        publisher:publisher
-        
-      }).then(() => {
-    
-        console.log("Developer Added")
-       
-      });
+
+      if(password !== password2) toast.error("Passwords don't match!");
+      else {
+          Axios.post("http://localhost:3001/developers", {
+              name:name,
+              password: password,
+              publisher_name : publisher_name
+              
+            }).then((res) => {
+
+              if(res.data.error)  {
+                toast.error(res.data.error);
+              }
+                
+              else {
+                toast.success("Developer registration successfull");
+
+                setTimeout(()=> {
+                  navigate('/Developer_Login');
+                }, 2000);
+              }
+                
+            
+          });
+
+      }
+
+      
     };
       return (
     
@@ -34,29 +53,31 @@ const Developer_Register = () => {
               <div className="col"></div>
               <div className="col border shadow rounded p-3">
                 <div className="row">
-                  <div className="col"><Link class="btn btn-secondary mb-3 container-fluid" to="/Developer_Login">Login</Link></div><div className="col"><Link class="btn btn-secondary container-fluid" to="/Developer_Register">Register</Link></div>
+                  <div className="col"><Link className="btn btn-secondary mb-3 container-fluid" to="/Developer_Login">Login</Link></div><div className="col"><Link className="btn btn-secondary container-fluid" to="/Developer_Register">Register</Link></div>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" onChange={(event) => {
+                <div className="form-floating mb-3">
+                  <input type="text" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={(event) => {
                     setName(event.target.value);
                   }}></input>
-                  <label for="floatingInput">Name</label>
+                  <label htmlFor="floatingInput">Name</label>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" onChange={(event) => {
-                    setPublisher(event.target.value);
+                <div className="form-floating mb-3">
+                  <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={(event) => {
+                    setPublisher_name(event.target.value);
                   }}></input>
-                  <label for="floatingInput">Publisher</label>
+                  <label htmlFor="floatingInput">Publisher</label>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control" id="floatingPassword" placeholder="Password" onChange={(event) => {
+                <div className="form-floating mb-3">
+                  <input type="password" className="form-control" id="floatingPassword" placeholder="Password" onChange={(event) => {
                     setPassword(event.target.value);
                   }}></input>
-                  <label for="floatingPassword">Password</label>
+                  <label htmlFor="floatingPassword">Password</label>
                 </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control" id="floatingPassword" placeholder="Password"></input>
-                  <label for="floatingPassword">Password</label>
+                <div className="form-floating mb-3">
+                  <input type="password" className="form-control" id="floatingPassword" placeholder="Password" onChange={(event) => {
+                    setPassword2(event.target.value)
+                  }}></input>
+                  <label htmlFor="floatingPassword">Confirm password</label>
                 </div>
     
                 <div className="row">
