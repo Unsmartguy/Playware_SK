@@ -193,7 +193,7 @@ function App() {
             <Route exact path="/Developer_Register" element={<Developer_Register />} />
             <Route exact path="/Developer" element={<Developer/>} />
             <Route exact path="/Publisher_Login" element={<Publisher_Login/>} />
-            <Route exact path="/Publisher_Register" element={<Publisher_Register />} />
+            <Route exact path="/Publisher_Register" element={<Publisher_Register/>} />
             <Route exact path="/Publisher" element={<Publisher />} />
             <Route exact path="/Home" element={<Home/>} />
             <Route exact path="/Types" element={<Types />} />
