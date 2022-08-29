@@ -198,7 +198,7 @@ function App() {
             <Route exact path="/Home" element={<Home/>} />
             <Route exact path="/Types" element={<Types />} />
             <Route exact path="/Game" element={<Game />} />
-            <Route exact path="/Buy" element={<Buy />} />
+            <Route exact path="/Buy" element={<Buy/>} />
 
 
          </Routes>
