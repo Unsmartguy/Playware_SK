@@ -62,6 +62,8 @@ const Game = () => {
                                                 <b>Price : </b> {game.price} $
                                                 <br></br>
                                                 <b>Total sales : </b> {game.total_sales}
+                                                <br></br>
+                                                <b>wishlisted : </b> {game.wishlist}
                                             </p>
                                             
                                         </div>

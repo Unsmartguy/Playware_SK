@@ -10,9 +10,61 @@ import moment from "moment";
 
 
 
-const Buy = () => {
+const Buy = (id) => {
+    const [Review, setReview] = useState([]);
+    const [ResReview,setResReview]=useState();
+
+    useEffect(() => {
+      
+        Axios.get(`http://localhost:3001/AddOns/`).then((response) => {
+            setResReview(response.data);
+        });
+  
+         
+        
+       
+       
+    }, []);
 
 
+    const Submit= () => {
+
+       
+        Axios.post("http://localhost:3001/games/developed", {
+         Review:Review,
+         id:id
+         
+          }).then((response) => {
+           toast.success(response.data)
+          });
+   
+};
+
+    const Buy= () => {
+
+       
+        Axios.post("http://localhost:3001/games/developed", {
+         id:id,
+         
+          }).then((response) => {
+           toast.success(response.data)
+          });
+   
+};
+
+const AddToWishlist= () => {
+
+       
+     
+    Axios.post("http://localhost:3001/games/developed", {
+        id:id,
+        
+         }).then((response) => {
+          toast.success(response.data)
+         });
+  
+
+};
 
 
     const [AddOnsList, setAddOnsList] = useState([]);
@@ -57,9 +109,44 @@ const Buy = () => {
             </div>
 
             <div className="row">
-            <div className="col-lg-12 col-lg-6 border shadow rounded p-3">
+                <div className="col-lg-12 col-lg-6 border shadow rounded p-3">
                 <div className="row">
-                    <div className="col-lg-6 col-lg-6 border shadow rounded p-3"></div><div className="col-lg-6 col-lg-6 border shadow rounded p-3"></div>
+                        <div className=" col-lg-6 border shadow rounded p-3">
+                                                    <div className='btn border shadow rounded mb-2' >
+                                                        <button  type="submit" onClick={ () => 
+                                                            Buy()} >
+                                                            <b>
+                                                            Buy
+                                                            </b>
+                                                        </button>
+                                                
+                                                     </div>
+                                                     <div className='btn border shadow rounded' >
+                                                        <button  type="submit" onClick={ () => 
+                                                            AddToWishlist()} >
+                                                            <b>
+                                                            +Wishlist
+                                                            </b>
+                                                        </button>
+                                                
+                                                     </div>
+                        </div>
+                        <div className=" col-lg-6 border shadow rounded p-3">
+                        <input type="name" className="form-control mb-1 border shadow rounded" id="floatingInput" placeholder="name@example.com"   onChange={(event) => {
+        setReview(event.target.value);
+      }}></input>   
+                                                     <div className='btn border shadow rounded' >
+                                                        <button  type="submit" onClick={ () => 
+                                                            Submit()} >
+                                                            <b>
+                                                            Submit review
+                                                            </b>
+                                                        </button>
+                                                        
+                                                
+                                                     </div>   
+                                                     <div className="border shadow rounded">Review: {ResReview}</div>      
+                        </div>  
                 </div>
             </div>
             </div>
@@ -96,7 +183,7 @@ const Buy = () => {
                 <br></br>
 
           
-                <h1 align="center">    List pf AddOns </h1>
+                <h1 align="center">    List of AddOns </h1>
                 <hr></hr>
                 <br></br>
 
